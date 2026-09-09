@@ -1,0 +1,257 @@
+/* src/renderer/src/styles/Dashboard.css */
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  height: 100%;
+}
+
+.btn-reset {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: transparent;
+  border: 1px solid var(--color-danger);
+  color: var(--color-danger);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-4);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.btn-reset:hover {
+  background: var(--color-danger-soft);
+}
+
+.btn-reset:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+.resumen-tarjetas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--space-6);
+}
+
+.tarjeta-stat {
+  padding: var(--space-6);
+  transition: transform var(--transition-base);
+}
+
+.tarjeta-stat:hover {
+  transform: translateY(-4px);
+}
+
+.tarjeta-stat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-4);
+}
+
+.tarjeta-stat-icon-info { background: var(--color-info-soft); color: var(--color-info); }
+.tarjeta-stat-icon-danger { background: var(--color-danger-soft); color: var(--color-danger); }
+.tarjeta-stat-icon-accent { background: var(--color-accent-soft); color: var(--color-accent); }
+
+.tarjeta-stat-label {
+  color: var(--color-text-muted);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: var(--space-2);
+}
+
+.tarjeta-stat-valor {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 1.9rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.tarjeta-stat-destacada {
+  border: 1px solid var(--color-accent-soft);
+  background: rgba(34, 197, 94, 0.05);
+}
+
+.tarjeta-stat-valor-glow {
+  text-shadow: 0 0 15px rgba(34, 197, 94, 0.35);
+}
+
+.graficos-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+  flex: 1;
+}
+
+.grafico-caja {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-6);
+}
+
+.grafico-titulo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  color: var(--color-text);
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  margin-bottom: var(--space-4);
+}
+
+@media (max-width: 900px) {
+  .graficos-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.seccion-ganancias-periodo {
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.periodo-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.periodo-titulo {
+  margin-bottom: 0;
+}
+
+.toggle-periodo {
+  display: flex;
+  background: rgba(148, 163, 184, 0.1);
+  border-radius: var(--radius-md);
+  padding: 4px;
+  gap: 4px;
+}
+
+.toggle-periodo-btn {
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm, 6px);
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.toggle-periodo-btn:hover {
+  color: var(--color-text);
+}
+
+.toggle-periodo-btn.activo {
+  background: var(--color-accent);
+  color: #0a0f1f;
+}
+
+.mini-tarjetas-periodo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-4);
+}
+
+.mini-tarjeta-periodo {
+  background: rgba(34, 197, 94, 0.05);
+  border: 1px solid var(--color-accent-soft);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+}
+
+.mini-tarjeta-periodo-label {
+  color: var(--color-text-muted);
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: var(--space-2);
+}
+
+.mini-tarjeta-periodo-label span {
+  text-transform: none;
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+.mini-tarjeta-periodo-valor {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.periodo-contenido {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .periodo-contenido {
+    grid-template-columns: 1fr;
+  }
+}
+
+.tabla-ganancias-wrapper {
+  max-height: 280px;
+  overflow-y: auto;
+  border: 1px solid var(--color-border, #334155);
+  border-radius: var(--radius-md);
+}
+
+.tabla-ganancias {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.tabla-ganancias thead th {
+  position: sticky;
+  top: 0;
+  background: rgba(148, 163, 184, 0.1);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  text-align: left;
+  padding: var(--space-2) var(--space-3);
+}
+
+.tabla-ganancias tbody td {
+  padding: var(--space-2) var(--space-3);
+  border-top: 1px solid rgba(148, 163, 184, 0.12);
+  color: var(--color-text);
+}
+
+.tabla-ganancias tbody tr:hover {
+  background: rgba(148, 163, 184, 0.06);
+}
+
+.tabla-ganancias-valor {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-accent);
+  font-weight: 600;
+}

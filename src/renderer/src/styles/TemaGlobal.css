@@ -1,0 +1,194 @@
+/* src/renderer/src/styles/TemaGlobal.css */
+@import './tokens.css';
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  overflow: hidden;
+  margin: 0;
+}
+
+.app-layout {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* Sidebar (Menú lateral) */
+.sidebar {
+  width: 250px;
+  flex-shrink: 0;
+  background-color: var(--color-sidebar);
+  border-right: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-4) 0;
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+  transition: width var(--transition-base);
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-info);
+  text-align: center;
+  padding-bottom: var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: var(--space-4);
+}
+
+.sidebar-logo svg {
+  filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.5));
+}
+
+.nav-boton {
+  background: transparent;
+  border: none;
+  border-right: 4px solid transparent;
+  color: var(--color-text-muted);
+  padding: var(--space-4) var(--space-5);
+  text-align: left;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background var(--transition-base), color var(--transition-base), padding var(--transition-base);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.nav-boton svg {
+  flex-shrink: 0;
+}
+
+.nav-boton:hover {
+  background-color: var(--color-surface-muted);
+  color: var(--color-text);
+  padding-left: var(--space-6);
+}
+
+.nav-boton:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: -2px;
+}
+
+.nav-boton.activo {
+  background-color: var(--color-info-soft);
+  color: var(--color-info);
+  font-weight: 600;
+  border-right-color: var(--color-info);
+}
+
+.buscador-box {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background-color: rgba(2, 6, 23, 0.8);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  color: var(--color-text-muted);
+}
+
+.buscador-box:focus-within {
+  border-color: var(--color-info);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+}
+
+.buscador-box input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--color-text);
+  font-size: 0.95rem;
+}
+
+.buscador-box input:focus {
+  outline: none;
+}
+
+/* Contenido Principal */
+.main-content {
+  flex: 1;
+  padding: var(--space-8);
+  overflow-y: auto;
+  background-color: var(--color-bg);
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+
+.main-content h1,
+.main-content h2,
+.main-content h3 {
+  font-family: var(--font-heading);
+  color: var(--color-text) !important;
+  font-weight: 600;
+  margin-bottom: var(--space-4);
+}
+
+.main-content p {
+  color: var(--color-text-muted) !important;
+  font-size: 1.05rem;
+}
+
+/* Paneles de Cristal (Glassmorphism) */
+.glass-panel {
+  background: rgba(14, 18, 35, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  z-index: 5;
+}
+
+input, select, button, textarea {
+  position: relative;
+  z-index: 10;
+}
+
+/* Animación de entrada */
+.fade-in {
+  animation: aparecer 0.4s ease-out forwards;
+}
+
+@keyframes aparecer {
+  0% { opacity: 0; transform: translateY(15px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive: ventana angosta colapsa la sidebar a solo íconos */
+@media (max-width: 900px) {
+  .sidebar {
+    width: 72px;
+  }
+
+  .sidebar-logo span,
+  .nav-boton .label {
+    display: none;
+  }
+
+  .nav-boton {
+    justify-content: center;
+    padding: var(--space-4);
+  }
+
+  .nav-boton:hover {
+    padding-left: var(--space-4);
+  }
+
+  .main-content {
+    padding: var(--space-4);
+  }
+}

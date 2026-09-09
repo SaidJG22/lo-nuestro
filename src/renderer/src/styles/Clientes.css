@@ -1,0 +1,91 @@
+.clientes-container { display: flex; flex-direction: column; gap: var(--space-8); height: 100%; }
+.kanban-board { display: flex; gap: var(--space-6); overflow-x: auto; padding-bottom: var(--space-4); flex: 1; }
+.kanban-col {
+  flex: 1; min-width: 320px; background: rgba(14, 18, 35, 0.6); border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border-soft); display: flex; flex-direction: column;
+}
+.kanban-header {
+  display: flex; align-items: center; justify-content: center; gap: var(--space-2);
+  padding: var(--space-4); font-weight: bold; text-align: center;
+  border-bottom: 1px solid var(--color-border-soft);
+}
+.kanban-header-warning { color: var(--color-warning); background: var(--color-warning-soft); }
+.kanban-header-danger { color: var(--color-danger); background: var(--color-danger-soft); }
+.kanban-header-accent { color: var(--color-accent); background: var(--color-accent-soft); }
+
+.kanban-body { padding: var(--space-4); display: flex; flex-direction: column; gap: var(--space-4); overflow-y: auto; }
+.ficha-trabajo {
+  background: linear-gradient(145deg, rgba(26, 30, 47, 0.9), rgba(2, 6, 23, 0.9));
+  border-radius: var(--radius-sm); padding: var(--space-4); border-left: 4px solid; position: relative;
+  box-shadow: var(--shadow-sm);
+}
+.ficha-a-hacer { border-left-color: var(--color-warning); }
+.ficha-a-arreglar { border-left-color: var(--color-danger); }
+.ficha-terminado { border-left-color: var(--color-accent); }
+
+.ficha-cliente {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--color-info);
+}
+
+.ficha-precio {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-accent);
+}
+
+.btn-cerrar {
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: var(--space-1);
+  border-radius: var(--radius-sm);
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.btn-cerrar:hover {
+  color: var(--color-danger);
+  background: var(--color-danger-soft);
+}
+
+.btn-cerrar:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+.cliente-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--space-4);
+  align-items: end;
+}
+
+.campo-cliente {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.campo-cliente label {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.campo-cliente-nombre {
+  grid-column: span 1;
+}
+
+.clientes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--space-6); }
+.cliente-card {
+  background: linear-gradient(145deg, rgba(26, 30, 47, 0.8), rgba(2, 6, 23, 0.8));
+  border: 1px solid var(--color-border-soft); border-radius: var(--radius-lg); padding: var(--space-6); position: relative;
+}
+.cliente-tipo { position: absolute; top: var(--space-4); right: var(--space-4); font-size: 0.8rem; padding: 0.2rem 0.6rem; border-radius: var(--radius-sm); font-weight: bold; }
+.tipo-empresa { background-color: var(--color-info-soft); color: #7dd3fc; border: 1px solid var(--color-info); }
+.tipo-consumidor { background-color: var(--color-accent-soft); color: #6ee7b7; border: 1px solid var(--color-accent); }

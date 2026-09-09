@@ -1,0 +1,177 @@
+/* src/renderer/src/styles/Calculadora.css */
+.calculadora-container {
+  display: flex;
+  gap: var(--space-8);
+  height: 100%;
+}
+
+.panel-formulario, .panel-ticket {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.input-dark {
+  background-color: rgba(2, 6, 23, 0.8) !important;
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+  color: var(--color-text) !important;
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  transition: all var(--transition-base);
+}
+
+.input-dark:focus {
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.3) !important;
+  border-color: var(--color-info) !important;
+  outline: none;
+}
+
+.input-dark::placeholder {
+  color: var(--color-text-subtle);
+}
+
+.form-label {
+  color: var(--color-text-muted);
+  font-weight: 600;
+  margin-bottom: var(--space-2);
+  font-size: 0.85rem;
+}
+
+.ticket-resumen {
+  background: linear-gradient(145deg, var(--color-bg-elevated), var(--color-bg));
+  border: 2px solid var(--color-accent-soft);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.ticket-titulo {
+  font-family: var(--font-heading);
+  text-align: center;
+  color: var(--color-text);
+  margin-bottom: var(--space-4);
+}
+
+.ticket-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dashed var(--color-border-soft);
+  padding-bottom: var(--space-2);
+}
+
+.ticket-item span:first-child {
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  font-family: var(--font-body);
+}
+
+.ticket-item span:last-child {
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.ticket-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 2px solid var(--color-accent);
+}
+
+.ticket-total span:first-child {
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.ticket-total span:last-child {
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-shadow: var(--shadow-glow-accent);
+}
+
+.btn-guardar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  background-color: var(--color-info);
+  color: var(--color-sidebar);
+  font-weight: bold;
+  font-size: 1.1rem;
+  padding: var(--space-4);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  margin-top: auto;
+}
+
+.btn-guardar:hover {
+  background-color: #7dd3fc;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(56, 189, 248, 0.4);
+}
+
+.btn-guardar:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+@media (max-width: 900px) {
+  .calculadora-container {
+    flex-direction: column;
+  }
+}
+
+body.modo-impresion .sidebar,
+body.modo-impresion .panel-formulario {
+  display: none !important;
+}
+
+body.modo-impresion .main-content {
+  padding: var(--space-4);
+}
+
+.fila-extra {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  margin-bottom: var(--space-2);
+}
+
+.fila-extra select,
+.fila-extra input[type='text'] {
+  flex: 2;
+  min-width: 0;
+}
+
+.fila-extra-monto {
+  flex: 1;
+  min-width: 70px;
+  max-width: 110px;
+}
+
+.fila-extra-total {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  margin: var(--space-2) 0 0;
+}
+
+.fila-extra-total strong {
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
