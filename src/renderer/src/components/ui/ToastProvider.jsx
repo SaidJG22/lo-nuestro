@@ -26,9 +26,10 @@ export function ToastProvider({ children }) {
   }, [])
 
   const showToast = useCallback(
-    (message, type = 'info') => {
+    (message, type = 'info', options = {}) => {
+      const { actionLabel, onAction } = options
       const id = Date.now() + Math.random()
-      setToasts((current) => [...current, { id, message, type }])
+      setToasts((current) => [...current, { id, message, type, actionLabel, onAction }])
       const timer = setTimeout(() => dismissToast(id), AUTO_DISMISS_MS)
       timers.current.set(id, timer)
     },
@@ -45,6 +46,18 @@ export function ToastProvider({ children }) {
             <div key={toast.id} className={`toast-item toast-${toast.type}`}>
               <Icon size={18} className="toast-icon" />
               <span className="toast-message">{toast.message}</span>
+              {toast.onAction && (
+                <button
+                  type="button"
+                  className="toast-action"
+                  onClick={() => {
+                    toast.onAction()
+                    dismissToast(toast.id)
+                  }}
+                >
+                  {toast.actionLabel || 'Deshacer'}
+                </button>
+              )}
               <button
                 type="button"
                 className="toast-close"

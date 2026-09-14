@@ -1,25 +1,35 @@
 import { useState } from 'react'
 import { X } from 'lucide-react'
+import { formatearPesos } from '../../utils/formato'
 import './ConfirmModal.css'
 
 export default function EditarVentaModal({ trabajo, onGuardar, onCerrar }) {
   const [titulo, setTitulo] = useState(trabajo?.titulo ?? '')
   const [cliente, setCliente] = useState(trabajo?.cliente ?? '')
-  const [costo, setCosto] = useState(String(trabajo?.costo ?? ''))
-  const [totalCobrado, setTotalCobrado] = useState(String(trabajo?.totalCobrado ?? ''))
+  const [costo, setCosto] = useState(String(Math.round(trabajo?.costo ?? 0)))
+  const [totalCobrado, setTotalCobrado] = useState(String(Math.round(trabajo?.totalCobrado ?? 0)))
+  const [sena, setSena] = useState(String(trabajo?.sena ?? ''))
+  const [fechaEntrega, setFechaEntrega] = useState(trabajo?.fechaEntrega ?? '')
 
   if (!trabajo) return null
 
-  const gananciaCalculada = (parseFloat(totalCobrado) || 0) - (parseFloat(costo) || 0)
+  const redondear = (valor) => Math.round(parseFloat(valor) || 0)
+  const totalNumero = redondear(totalCobrado)
+  const senaNumero = redondear(sena)
+  const costoNumero = redondear(costo)
+  const gananciaCalculada = totalNumero - costoNumero
+  const saldo = Math.max(totalNumero - senaNumero, 0)
 
   const handleSubmit = (e) => {
     e.preventDefault()
     onGuardar(trabajo.id, {
       titulo,
       cliente,
-      costo: parseFloat(costo) || 0,
-      totalCobrado: parseFloat(totalCobrado) || 0,
-      ganancia: gananciaCalculada
+      costo: costoNumero,
+      totalCobrado: totalNumero,
+      ganancia: gananciaCalculada,
+      sena: senaNumero,
+      fechaEntrega
     })
   }
 
@@ -78,10 +88,36 @@ export default function EditarVentaModal({ trabajo, onGuardar, onCerrar }) {
               />
             </div>
           </div>
+          <div className="d-flex gap-2">
+            <div className="flex-fill">
+              <label className="form-label">Seña cobrada ($)</label>
+              <input
+                type="number"
+                min="0"
+                className="form-control input-dark"
+                value={sena}
+                onChange={(e) => setSena(e.target.value)}
+              />
+            </div>
+            <div className="flex-fill">
+              <label className="form-label">Fecha de entrega</label>
+              <input
+                type="date"
+                className="form-control input-dark"
+                value={fechaEntrega}
+                onChange={(e) => setFechaEntrega(e.target.value)}
+              />
+            </div>
+          </div>
           <p className="text-muted small m-0">
             Ganancia resultante:{' '}
             <strong style={{ color: 'var(--color-accent)' }}>
-              ${gananciaCalculada.toFixed(2)}
+              {formatearPesos(gananciaCalculada)}
+            </strong>
+            {' · '}
+            Saldo pendiente:{' '}
+            <strong style={{ color: saldo > 0 ? 'var(--color-warning)' : 'var(--color-accent)' }}>
+              {formatearPesos(saldo)}
             </strong>
           </p>
           <div className="confirm-actions">

@@ -14,12 +14,18 @@ export default function SelectorTipoTrabajo({
   const [nuevoTipoInput, setNuevoTipoInput] = useState('')
   const confirmar = useConfirm()
 
-  const handleAgregarTipo = (e) => {
-    e.preventDefault()
+  const handleAgregarTipo = () => {
     if (nuevoTipoInput.trim() !== '') {
       agregarTipoTrabajo(nuevoTipoInput)
       setTipoActual(nuevoTipoInput)
       setNuevoTipoInput('')
+    }
+  }
+
+  const handleKeyDownNuevoTipo = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      handleAgregarTipo()
     }
   }
 
@@ -58,18 +64,24 @@ export default function SelectorTipoTrabajo({
           <Trash2 size={16} />
         </button>
       </div>
-      <form onSubmit={handleAgregarTipo} className="d-flex gap-2">
+      <div className="d-flex gap-2">
         <input
           type="text"
           className="form-control form-control-sm input-dark"
           placeholder={placeholder}
           value={nuevoTipoInput}
           onChange={(e) => setNuevoTipoInput(e.target.value)}
+          onKeyDown={handleKeyDownNuevoTipo}
         />
-        <button type="submit" className="btn btn-sm btn-success" aria-label="Agregar nuevo rubro">
+        <button
+          type="button"
+          className="btn btn-sm btn-success"
+          aria-label="Agregar nuevo rubro"
+          onClick={handleAgregarTipo}
+        >
           <Plus size={14} />
         </button>
-      </form>
+      </div>
     </div>
   )
 }

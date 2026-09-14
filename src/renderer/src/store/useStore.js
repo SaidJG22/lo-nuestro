@@ -1,6 +1,22 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
+const MAX_MOVIMIENTOS = 200
+
+const registrarMovimiento = (movimientos, material, cantidad, motivo, stockResultante) =>
+  [
+    {
+      id: crypto.randomUUID(),
+      fecha: new Date().toISOString(),
+      materialId: material.id,
+      material: material.nombre,
+      cantidad,
+      motivo,
+      stockResultante
+    },
+    ...(movimientos ?? [])
+  ].slice(0, MAX_MOVIMIENTOS)
+
 export const useStore = create(
   persist(
     (set) => ({
@@ -27,6 +43,11 @@ export const useStore = create(
         'Textiles',
         'Otros'
       ],
+      movimientosStock: [],
+      tema: 'dark',
+
+      // Tema claro/oscuro
+      toggleTema: () => set((state) => ({ tema: state.tema === 'dark' ? 'light' : 'dark' })),
 
       // NUEVO: Resetear gráficos y ventas
       resetearVentas: () => set({ ventas: [] }),
@@ -38,7 +59,8 @@ export const useStore = create(
           inventario: datos.inventario ?? state.inventario,
           clientes: datos.clientes ?? state.clientes,
           tiposTrabajo: datos.tiposTrabajo ?? state.tiposTrabajo,
-          categoriasInventario: datos.categoriasInventario ?? state.categoriasInventario
+          categoriasInventario: datos.categoriasInventario ?? state.categoriasInventario,
+          movimientosStock: datos.movimientosStock ?? state.movimientosStock
         })),
 
       // Tipos de Trabajo
@@ -85,6 +107,11 @@ export const useStore = create(
         set((state) => ({
           ventas: state.ventas.filter((v) => v.id !== idVenta)
         })),
+      eliminarVentas: (ids) =>
+        set((state) => {
+          const aBorrar = new Set(ids)
+          return { ventas: state.ventas.filter((v) => !aBorrar.has(v.id)) }
+        }),
       actualizarVenta: (idVenta, cambios) =>
         set((state) => ({
           ventas: state.ventas.map((v) => (v.id === idVenta ? { ...v, ...cambios } : v))
@@ -92,19 +119,52 @@ export const useStore = create(
 
       // Inventario
       agregarMaterial: (nuevoMaterial) =>
+        set((state) => {
+          const material = { id: Date.now(), ...nuevoMaterial }
+          return {
+            inventario: [...state.inventario, material],
+            movimientosStock: registrarMovimiento(
+              state.movimientosStock,
+              material,
+              material.stock,
+              'Alta de material',
+              material.stock
+            )
+          }
+        }),
+      actualizarStock: (id, cantidad, motivo = 'Ajuste manual') =>
+        set((state) => {
+          const item = state.inventario.find((m) => m.id === id)
+          if (!item) return state
+          const stockResultante = item.stock + cantidad
+          return {
+            inventario: state.inventario.map((m) =>
+              m.id === id ? { ...m, stock: stockResultante } : m
+            ),
+            movimientosStock: registrarMovimiento(
+              state.movimientosStock,
+              item,
+              cantidad,
+              motivo,
+              stockResultante
+            )
+          }
+        }),
+      eliminarMovimiento: (id) =>
         set((state) => ({
-          inventario: [...state.inventario, { id: Date.now(), ...nuevoMaterial }]
+          movimientosStock: state.movimientosStock.filter((m) => m.id !== id)
         })),
-      actualizarStock: (id, cantidad) =>
-        set((state) => ({
-          inventario: state.inventario.map((item) =>
-            item.id === id ? { ...item, stock: item.stock + cantidad } : item
-          )
-        })),
+      limpiarMovimientos: () => set({ movimientosStock: [] }),
       eliminarMaterial: (id) =>
         set((state) => ({
           inventario: state.inventario.filter((item) => item.id !== id)
         })),
+      restaurarMaterial: (item, indice) =>
+        set((state) => {
+          const nuevo = [...state.inventario]
+          nuevo.splice(Math.min(Math.max(indice, 0), nuevo.length), 0, item)
+          return { inventario: nuevo }
+        }),
       agregarCategoriaInventario: (nuevaCategoria) =>
         set((state) => {
           if (state.categoriasInventario.includes(nuevaCategoria)) return state

@@ -34,6 +34,17 @@
 
   --color-ring: #38bdf8;
 
+  /* Color - superficies auxiliares (glass panels, overlays, inputs) */
+  --color-overlay: rgba(2, 6, 23, 0.65);
+  --color-input-bg: rgba(2, 6, 23, 0.8);
+  --color-input-border: rgba(56, 189, 248, 0.3);
+  --color-glass-bg: rgba(14, 18, 35, 0.7);
+  --color-glass-bg-soft: rgba(14, 18, 35, 0.6);
+  --color-card-gradient-start: rgba(26, 30, 47, 0.9);
+  --color-card-gradient-end: rgba(2, 6, 23, 0.9);
+  --color-card-gradient-start-soft: rgba(26, 30, 47, 0.8);
+  --color-card-gradient-end-soft: rgba(2, 6, 23, 0.8);
+
   /* Tipografía */
   --font-heading: 'Lexend', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, sans-serif;
@@ -63,6 +74,44 @@
   /* Transiciones */
   --transition-fast: 150ms ease;
   --transition-base: 250ms ease;
+}
+
+:root[data-theme='light'] {
+  /* Color - base */
+  --color-bg: #f1f5f9;
+  --color-bg-elevated: #ffffff;
+  --color-sidebar: #ffffff;
+  --color-surface-muted: #e2e8f0;
+  --color-border: #cbd5e1;
+  --color-border-soft: rgba(15, 23, 42, 0.1);
+
+  /* Color - texto */
+  --color-text: #0f172a;
+  --color-text-muted: #475569;
+  --color-text-subtle: #64748b;
+
+  /* Color - acento / semántico (mismos tonos, funcionan bien sobre claro) */
+  --color-accent: #16a34a;
+  --color-accent-soft: rgba(22, 163, 74, 0.12);
+  --color-info: #0284c7;
+  --color-info-soft: rgba(2, 132, 199, 0.12);
+  --color-warning: #d97706;
+  --color-warning-soft: rgba(217, 119, 6, 0.12);
+  --color-danger: #dc2626;
+  --color-danger-soft: rgba(220, 38, 38, 0.12);
+
+  --color-ring: #0284c7;
+
+  /* Color - superficies auxiliares */
+  --color-overlay: rgba(15, 23, 42, 0.45);
+  --color-input-bg: #ffffff;
+  --color-input-border: rgba(2, 132, 199, 0.35);
+  --color-glass-bg: rgba(255, 255, 255, 0.75);
+  --color-glass-bg-soft: rgba(255, 255, 255, 0.65);
+  --color-card-gradient-start: #ffffff;
+  --color-card-gradient-end: #eef2f7;
+  --color-card-gradient-start-soft: #ffffff;
+  --color-card-gradient-end-soft: #f1f5f9;
 }
 
 *,

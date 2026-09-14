@@ -23,6 +23,45 @@
   justify-content: flex-end;
 }
 
+.inventario-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.inventario-filtros .buscador-box {
+  flex: 1;
+  min-width: 220px;
+}
+
+.inventario-filtros select {
+  min-width: 180px;
+}
+
+.btn-exportar-stock {
+  min-width: 200px;
+}
+
+.btn-exportar-stock button {
+  margin-top: 0 !important;
+}
+
+/* Modo impresión: exportar Stock a PDF muestra solo la tabla filtrada */
+body.modo-impresion-stock .sidebar,
+body.modo-impresion-stock .panel-formulario-stock,
+body.modo-impresion-stock .btn-icono,
+body.modo-impresion-stock .buscador-box,
+body.modo-impresion-stock .inventario-filtros select,
+body.modo-impresion-stock .btn-exportar-stock,
+body.modo-impresion-stock .movimientos-stock {
+  display: none !important;
+}
+
+body.modo-impresion-stock .main-content {
+  padding: var(--space-4);
+}
+
 .inventario-resumen-total {
   color: var(--color-text-muted);
   font-size: 0.95rem;
@@ -66,7 +105,7 @@
 }
 
 .tabla-glass {
-  background: rgba(14, 18, 35, 0.6);
+  background: var(--color-glass-bg-soft);
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border-soft);
   overflow: hidden;

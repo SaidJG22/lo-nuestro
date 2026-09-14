@@ -58,6 +58,28 @@
   line-height: 1.4;
 }
 
+.toast-action {
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  color: var(--color-info);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast);
+}
+
+.toast-action:hover {
+  background: var(--color-info-soft);
+}
+
+.toast-action:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
 .toast-close {
   background: transparent;
   border: none;

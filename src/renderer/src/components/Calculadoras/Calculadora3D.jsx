@@ -8,6 +8,7 @@ import SelectorMaterial from '../ui/SelectorMaterial'
 import ListaExtras from '../ui/ListaExtras'
 import BotonExportarPDF from '../ui/BotonExportarPDF'
 import { Settings, Boxes, Gauge } from 'lucide-react'
+import { formatearPesos } from '../../utils/formato'
 import '../../styles/Calculadora.css'
 
 export default function Calculadora3D({ tipoActual, setTipoActual }) {
@@ -83,19 +84,21 @@ export default function Calculadora3D({ tipoActual, setTipoActual }) {
       cliente,
       tipo: tipoActual,
       estado: estadoTrabajo,
-      costo: costoBaseFab3D,
-      ganancia: gananciaNeta3D,
-      totalCobrado: precioSugerido3D
+      costo: Math.round(costoBaseFab3D),
+      ganancia: Math.round(precioSugerido3D) - Math.round(costoBaseFab3D),
+      totalCobrado: Math.round(precioSugerido3D),
+      sena: 0
     })
 
+    const motivo = `Cotización: ${producto}`
     if (materialId) {
       const item = inventario.find((m) => String(m.id) === materialId)
-      if (item) actualizarStock(item.id, -1)
+      if (item) actualizarStock(item.id, -1, motivo)
     }
     extras.forEach((fila) => {
       if (!fila.materialId) return
       const item = inventario.find((m) => String(m.id) === fila.materialId)
-      if (item) actualizarStock(item.id, -1)
+      if (item) actualizarStock(item.id, -1, motivo)
     })
 
     showToast(`¡Trabajo guardado como "${estadoTrabajo}"!`, 'success')
@@ -308,35 +311,35 @@ export default function Calculadora3D({ tipoActual, setTipoActual }) {
           </div>
           <div className="ticket-item">
             <span>Gasto de Filamento ({pesoPieza}g):</span>
-            <span>${costoMaterial3D.toFixed(2)}</span>
+            <span>{formatearPesos(costoMaterial3D)}</span>
           </div>
           <div className="ticket-item">
             <span>Gasto de Electricidad ({tiempoImpresion}hs):</span>
-            <span>${costoLuz3D.toFixed(2)}</span>
+            <span>{formatearPesos(costoLuz3D)}</span>
           </div>
           <div className="ticket-item">
             <span>Desgaste de Máquina ({tiempoImpresion}hs):</span>
-            <span>${costoDesgasteMaquina3D.toFixed(2)}</span>
+            <span>{formatearPesos(costoDesgasteMaquina3D)}</span>
           </div>
           <div className="ticket-item">
             <span>Extras (Pintura, Lijas, etc.):</span>
-            <span>${costoExtrasTotal.toFixed(2)}</span>
+            <span>{formatearPesos(costoExtrasTotal)}</span>
           </div>
           <div className="ticket-item">
             <span>Mano de Obra ({tiempoManoObra}hs):</span>
-            <span>${costoManoObra3D.toFixed(2)}</span>
+            <span>{formatearPesos(costoManoObra3D)}</span>
           </div>
           <div className="ticket-item mt-3 border-0">
             <span className="text-info">COSTO BASE (+{fallaPorcentaje}% falla):</span>
-            <span className="text-info fw-bold">${costoBaseFab3D.toFixed(2)}</span>
+            <span className="text-info fw-bold">{formatearPesos(costoBaseFab3D)}</span>
           </div>
           <div className="ticket-item border-0">
             <span className="text-warning">Ganancia (+{margenPorcentaje}%):</span>
-            <span className="text-warning">+ ${gananciaNeta3D.toFixed(2)}</span>
+            <span className="text-warning">+ {formatearPesos(gananciaNeta3D)}</span>
           </div>
           <div className="ticket-total">
             <span>PRECIO VENTA:</span>
-            <span>${precioSugerido3D.toFixed(2)}</span>
+            <span>{formatearPesos(precioSugerido3D)}</span>
           </div>
         </div>
 

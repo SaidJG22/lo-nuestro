@@ -8,6 +8,7 @@ import SelectorMaterial from '../ui/SelectorMaterial'
 import ListaExtras from '../ui/ListaExtras'
 import BotonExportarPDF from '../ui/BotonExportarPDF'
 import { Settings, Flame, Layers, Gauge } from 'lucide-react'
+import { formatearPesos } from '../../utils/formato'
 import '../../styles/Calculadora.css'
 
 export default function CalculadoraLaser({ tipoActual, setTipoActual }) {
@@ -74,18 +75,20 @@ export default function CalculadoraLaser({ tipoActual, setTipoActual }) {
       cliente,
       tipo: tipoActual,
       estado: estadoTrabajo,
-      costo: costoBaseLaser,
-      ganancia: precioFinalLaser - costoBaseLaser,
-      totalCobrado: precioFinalLaser
+      costo: Math.round(costoBaseLaser),
+      ganancia: Math.round(precioFinalLaser) - Math.round(costoBaseLaser),
+      totalCobrado: Math.round(precioFinalLaser),
+      sena: 0
     })
+    const motivo = `Cotización: ${producto}`
     if (materialId) {
       const item = inventario.find((m) => String(m.id) === materialId)
-      if (item) actualizarStock(item.id, -1)
+      if (item) actualizarStock(item.id, -1, motivo)
     }
     extras.forEach((fila) => {
       if (!fila.materialId) return
       const item = inventario.find((m) => String(m.id) === fila.materialId)
-      if (item) actualizarStock(item.id, -1)
+      if (item) actualizarStock(item.id, -1, motivo)
     })
     showToast(`¡Trabajo guardado como "${estadoTrabajo}"!`, 'success')
     setProducto('')
@@ -316,33 +319,33 @@ export default function CalculadoraLaser({ tipoActual, setTipoActual }) {
           </div>
           <div className="ticket-item">
             <span>Material (Plancha + Extras):</span>
-            <span>${costoMaterialLaser.toFixed(2)}</span>
+            <span>{formatearPesos(costoMaterialLaser)}</span>
           </div>
           <div className="ticket-item">
             <span>Uso de Máquina:</span>
-            <span>${costoTotalMaquinaLaser.toFixed(2)}</span>
+            <span>{formatearPesos(costoTotalMaquinaLaser)}</span>
           </div>
           <div className="ticket-item">
             <span>Mano de Obra:</span>
-            <span>${costoTotalManoObraLaser.toFixed(2)}</span>
+            <span>{formatearPesos(costoTotalManoObraLaser)}</span>
           </div>
           <div className="ticket-item">
             <span>Fletes / Extras:</span>
-            <span>${(parseFloat(flete) || 0).toFixed(2)}</span>
+            <span>{formatearPesos(parseFloat(flete) || 0)}</span>
           </div>
           <div className="ticket-item mt-3 border-0">
             <span className="text-info">COSTO BASE TOTAL:</span>
-            <span className="text-info fw-bold">${costoBaseLaser.toFixed(2)}</span>
+            <span className="text-info fw-bold">{formatearPesos(costoBaseLaser)}</span>
           </div>
           <div className="ticket-item border-0">
             <span className="text-warning">Ganancia ({margenGanancia}%):</span>
             <span className="text-warning">
-              + ${((costoBaseLaser * (parseFloat(margenGanancia) || 0)) / 100).toFixed(2)}
+              + {formatearPesos((costoBaseLaser * (parseFloat(margenGanancia) || 0)) / 100)}
             </span>
           </div>
           <div className="ticket-total">
             <span>PRECIO VENTA:</span>
-            <span>${precioFinalLaser.toFixed(2)}</span>
+            <span>{formatearPesos(precioFinalLaser)}</span>
           </div>
         </div>
         <button className="btn-guardar mt-auto" onClick={handleGuardar}>

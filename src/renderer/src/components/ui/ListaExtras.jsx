@@ -1,4 +1,5 @@
 import { Plus, Trash2 } from 'lucide-react'
+import { formatearPesos } from '../../utils/formato'
 
 export default function ListaExtras({
   inventario,
@@ -92,7 +93,7 @@ export default function ListaExtras({
 
       {extras.length > 0 && (
         <p className="fila-extra-total">
-          Total Extras: <strong>${total.toFixed(2)}</strong>
+          Total Extras: <strong>{formatearPesos(total)}</strong>
         </p>
       )}
     </div>

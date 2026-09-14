@@ -1,4 +1,5 @@
 import { AlertTriangle } from 'lucide-react'
+import { formatearPesos } from '../../utils/formato'
 
 export default function SelectorMaterial({ inventario, materialId, setMaterialId, onSeleccionar }) {
   const handleChange = (e) => {
@@ -19,7 +20,7 @@ export default function SelectorMaterial({ inventario, materialId, setMaterialId
         <option value="">Cargar precio manualmente...</option>
         {inventario.map((item) => (
           <option key={item.id} value={item.id}>
-            {item.nombre} — {item.stock} en stock (${item.costo})
+            {item.nombre} — {item.stock} en stock ({formatearPesos(item.costo)})
           </option>
         ))}
       </select>

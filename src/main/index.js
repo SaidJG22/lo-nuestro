@@ -77,15 +77,15 @@ app.whenReady().then(() => {
     return { ok: true, contenido }
   })
 
-  ipcMain.handle('ticket:exportar-pdf', async () => {
+  ipcMain.handle('reporte:exportar-pdf', async (_event, defaultFileName) => {
     if (!mainWindow) return { ok: false }
     const buffer = await mainWindow.webContents.printToPDF({
       printBackground: true,
       pageSize: 'A4'
     })
     const { canceled, filePath } = await dialog.showSaveDialog(mainWindow, {
-      title: 'Guardar ticket como PDF',
-      defaultPath: `ticket-${Date.now()}.pdf`,
+      title: 'Guardar PDF',
+      defaultPath: defaultFileName || `reporte-${Date.now()}.pdf`,
       filters: [{ name: 'PDF', extensions: ['pdf'] }]
     })
     if (canceled || !filePath) return { ok: false }

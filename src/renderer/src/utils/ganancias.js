@@ -55,6 +55,11 @@ export function agruparGananciasPorMes(ventas) {
   )
 }
 
+export function idsDelPeriodo(ventas, clave, vista) {
+  const obtenerClave = vista === 'dia' ? claveDia : claveMes
+  return ventas.filter((v) => obtenerClave(v.fecha) === clave).map((v) => v.id)
+}
+
 export function agruparGananciasPorTipo(ventas) {
   const grupos = new Map()
 

@@ -2,22 +2,32 @@ import { useState } from 'react'
 import { FileDown } from 'lucide-react'
 import { useToast } from './ToastProvider'
 
-export default function BotonExportarPDF({ producto }) {
+export default function BotonExportarPDF({
+  producto,
+  printClass = 'modo-impresion',
+  fileName,
+  label = 'Guardar Ticket en PDF',
+  validar
+}) {
   const showToast = useToast()
   const [exportando, setExportando] = useState(false)
 
   const handleExportar = async () => {
-    if (!producto) return showToast('Cargá primero el nombre del producto.', 'error')
+    if (validar) {
+      if (!validar()) return
+    } else if (typeof producto !== 'undefined' && !producto) {
+      return showToast('Cargá primero el nombre del producto.', 'error')
+    }
 
     setExportando(true)
-    document.body.classList.add('modo-impresion')
+    document.body.classList.add(printClass)
     await new Promise((resolve) => requestAnimationFrame(resolve))
 
     try {
-      const resultado = await window.api.exportarTicketPDF()
-      if (resultado.ok) showToast('Ticket exportado a PDF.', 'success')
+      const resultado = await window.api.exportarPDF(fileName ? fileName() : undefined)
+      if (resultado.ok) showToast('PDF exportado.', 'success')
     } finally {
-      document.body.classList.remove('modo-impresion')
+      document.body.classList.remove(printClass)
       setExportando(false)
     }
   }
@@ -29,7 +39,7 @@ export default function BotonExportarPDF({ producto }) {
       onClick={handleExportar}
       disabled={exportando}
     >
-      <FileDown size={16} /> {exportando ? 'Generando...' : 'Guardar Ticket en PDF'}
+      <FileDown size={16} /> {exportando ? 'Generando...' : label}
     </button>
   )
 }

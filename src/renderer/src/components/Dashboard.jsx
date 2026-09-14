@@ -26,16 +26,18 @@ import {
 } from 'lucide-react'
 import { useConfirm } from './ui/ConfirmModal'
 import { useToast } from './ui/ToastProvider'
-import { CHART_COLORS, CHART_TOOLTIP_STYLE } from '../utils/chartTheme'
+import { getChartColors, getChartTooltipStyle } from '../utils/chartTheme'
 import {
   agruparGananciasPorDia,
   agruparGananciasPorMes,
   agruparGananciasPorTipo,
   gananciaDeHoy,
   gananciaDelMes,
+  idsDelPeriodo,
   etiquetaHoy,
   etiquetaMesActual
 } from '../utils/ganancias'
+import { formatearPesos } from '../utils/formato'
 import '../styles/Dashboard.css'
 
 export default function Dashboard() {
@@ -46,13 +48,19 @@ export default function Dashboard() {
     tiposTrabajo,
     categoriasInventario,
     resetearVentas,
-    restaurarBackup
+    eliminarVentas,
+    restaurarBackup,
+    movimientosStock,
+    tema
   } = useStore()
   const confirmar = useConfirm()
   const showToast = useToast()
   const [reseteando, setReseteando] = useState(false)
   const [procesandoBackup, setProcesandoBackup] = useState(false)
   const [vistaPeriodo, setVistaPeriodo] = useState('dia')
+
+  const CHART_COLORS = getChartColors(tema)
+  const CHART_TOOLTIP_STYLE = getChartTooltipStyle(tema)
 
   const totalCobrado = ventas.reduce((acc, venta) => acc + venta.totalCobrado, 0)
   const costoTotal = ventas.reduce((acc, venta) => acc + venta.costo, 0)
@@ -90,6 +98,17 @@ export default function Dashboard() {
     if (ok) resetearVentas()
   }
 
+  const handleBorrarPeriodo = async (fila) => {
+    const ids = idsDelPeriodo(ventas, fila.clave, vistaPeriodo)
+    const ok = await confirmar(
+      `Se eliminarán ${ids.length} trabajo${ids.length === 1 ? '' : 's'} de ${fila.label}. También desaparecen del tablero de Clientes.`,
+      { title: 'Borrar período', danger: true }
+    )
+    if (!ok) return
+    eliminarVentas(ids)
+    showToast(`Trabajos de ${fila.label} eliminados.`, 'success')
+  }
+
   const handleExportarBackup = async () => {
     setProcesandoBackup(true)
     try {
@@ -99,6 +118,7 @@ export default function Dashboard() {
         clientes,
         tiposTrabajo,
         categoriasInventario,
+        movimientosStock,
         exportadoEl: new Date().toISOString()
       }
       const resultado = await window.api.exportarBackup(JSON.stringify(datos, null, 2))
@@ -165,7 +185,7 @@ export default function Dashboard() {
           </div>
           <h4 className="tarjeta-stat-label">Facturación Bruta</h4>
           <p className="tarjeta-stat-valor" style={{ color: 'var(--color-info)' }}>
-            ${totalCobrado.toFixed(2)}
+            {formatearPesos(totalCobrado)}
           </p>
         </div>
         <div className="glass-panel tarjeta-stat">
@@ -174,7 +194,7 @@ export default function Dashboard() {
           </div>
           <h4 className="tarjeta-stat-label">Costos Operativos</h4>
           <p className="tarjeta-stat-valor" style={{ color: 'var(--color-danger)' }}>
-            ${costoTotal.toFixed(2)}
+            {formatearPesos(costoTotal)}
           </p>
         </div>
         <div className="glass-panel tarjeta-stat tarjeta-stat-destacada">
@@ -186,7 +206,7 @@ export default function Dashboard() {
             className="tarjeta-stat-valor tarjeta-stat-valor-glow"
             style={{ color: 'var(--color-accent)' }}
           >
-            ${gananciaNeta.toFixed(2)}
+            {formatearPesos(gananciaNeta)}
           </p>
         </div>
       </div>
@@ -282,7 +302,7 @@ export default function Dashboard() {
                 <YAxis stroke={CHART_COLORS.textMuted} />
                 <Tooltip
                   contentStyle={CHART_TOOLTIP_STYLE}
-                  formatter={(value) => `$${value.toFixed(2)}`}
+                  formatter={(value) => formatearPesos(value)}
                 />
                 <Bar
                   dataKey="ganancia"
@@ -302,19 +322,26 @@ export default function Dashboard() {
           <h4 className="grafico-titulo periodo-titulo">
             <CalendarDays size={18} /> Ganancias por Período
           </h4>
-          <div className="toggle-periodo">
-            <button
-              className={`toggle-periodo-btn ${vistaPeriodo === 'dia' ? 'activo' : ''}`}
-              onClick={() => setVistaPeriodo('dia')}
-            >
-              Diario
-            </button>
-            <button
-              className={`toggle-periodo-btn ${vistaPeriodo === 'mes' ? 'activo' : ''}`}
-              onClick={() => setVistaPeriodo('mes')}
-            >
-              Mensual
-            </button>
+          <div className="d-flex align-items-center gap-2">
+            <div className="toggle-periodo">
+              <button
+                className={`toggle-periodo-btn ${vistaPeriodo === 'dia' ? 'activo' : ''}`}
+                onClick={() => setVistaPeriodo('dia')}
+              >
+                Diario
+              </button>
+              <button
+                className={`toggle-periodo-btn ${vistaPeriodo === 'mes' ? 'activo' : ''}`}
+                onClick={() => setVistaPeriodo('mes')}
+              >
+                Mensual
+              </button>
+            </div>
+            {ventas.length > 0 && (
+              <button className="btn-reset" onClick={handleReset} disabled={reseteando}>
+                <Trash2 size={14} /> Borrar historial
+              </button>
+            )}
           </div>
         </div>
 
@@ -324,7 +351,7 @@ export default function Dashboard() {
               Ganancia de Hoy <span>({etiquetaHoy()})</span>
             </h5>
             <p className="mini-tarjeta-periodo-valor" style={{ color: 'var(--color-accent)' }}>
-              ${hoyTotal.toFixed(2)}
+              {formatearPesos(hoyTotal)}
             </p>
           </div>
           <div className="mini-tarjeta-periodo">
@@ -332,7 +359,7 @@ export default function Dashboard() {
               Ganancia de Este Mes <span>({etiquetaMesActual()})</span>
             </h5>
             <p className="mini-tarjeta-periodo-valor" style={{ color: 'var(--color-accent)' }}>
-              ${mesTotal.toFixed(2)}
+              {formatearPesos(mesTotal)}
             </p>
           </div>
         </div>
@@ -355,7 +382,7 @@ export default function Dashboard() {
                   <YAxis stroke={CHART_COLORS.textMuted} />
                   <Tooltip
                     contentStyle={CHART_TOOLTIP_STYLE}
-                    formatter={(value) => `$${value.toFixed(2)}`}
+                    formatter={(value) => formatearPesos(value)}
                   />
                   <Bar
                     dataKey="ganancia"
@@ -374,14 +401,25 @@ export default function Dashboard() {
                     <th>{vistaPeriodo === 'dia' ? 'Fecha' : 'Mes'}</th>
                     <th>Ganancia</th>
                     <th>Trabajos</th>
+                    <th aria-label="Acciones" />
                   </tr>
                 </thead>
                 <tbody>
                   {datosTabla.map((fila) => (
                     <tr key={fila.clave}>
                       <td>{fila.label}</td>
-                      <td className="tabla-ganancias-valor">${fila.ganancia.toFixed(2)}</td>
+                      <td className="tabla-ganancias-valor">{formatearPesos(fila.ganancia)}</td>
                       <td>{fila.cantidad}</td>
+                      <td>
+                        <button
+                          type="button"
+                          className="btn-icono btn-icono-danger"
+                          aria-label={`Borrar trabajos de ${fila.label}`}
+                          onClick={() => handleBorrarPeriodo(fila)}
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
