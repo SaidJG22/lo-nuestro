@@ -1,18 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useStore } from '../store/useStore'
 import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid
-} from 'recharts'
-import {
   BarChart3,
   Trash2,
   PieChart as PieChartIcon,
@@ -26,7 +14,7 @@ import {
 } from 'lucide-react'
 import { useConfirm } from './ui/ConfirmModal'
 import { useToast } from './ui/ToastProvider'
-import { getChartColors, getChartTooltipStyle } from '../utils/chartTheme'
+import { getChartColors } from '../utils/chartTheme'
 import {
   agruparGananciasPorDia,
   agruparGananciasPorMes,
@@ -35,10 +23,23 @@ import {
   gananciaDelMes,
   idsDelPeriodo,
   etiquetaHoy,
-  etiquetaMesActual
+  etiquetaMesActual,
+  serieContinuaPorDia,
+  serieContinuaPorMes
 } from '../utils/ganancias'
 import { formatearPesos } from '../utils/formato'
+import GraficoDistribucion from './graficos/GraficoDistribucion'
+import GraficoBarrasApiladas from './graficos/GraficoBarrasApiladas'
+import GraficoPeriodo from './graficos/GraficoPeriodo'
+import Sparkline from './graficos/Sparkline'
+import { useContador } from './graficos/useContador'
 import '../styles/Dashboard.css'
+
+// Número que "cuenta" hasta su valor al aparecer o cambiar.
+function MontoAnimado({ valor, className }) {
+  const mostrado = useContador(valor)
+  return <p className={className}>{formatearPesos(mostrado)}</p>
+}
 
 export default function Dashboard() {
   const {
@@ -59,8 +60,7 @@ export default function Dashboard() {
   const [procesandoBackup, setProcesandoBackup] = useState(false)
   const [vistaPeriodo, setVistaPeriodo] = useState('dia')
 
-  const CHART_COLORS = getChartColors(tema)
-  const CHART_TOOLTIP_STYLE = getChartTooltipStyle(tema)
+  const colores = getChartColors(tema)
 
   const totalCobrado = ventas.reduce((acc, venta) => acc + venta.totalCobrado, 0)
   const costoTotal = ventas.reduce((acc, venta) => acc + venta.costo, 0)
@@ -72,20 +72,29 @@ export default function Dashboard() {
   const hoyTotal = useMemo(() => gananciaDeHoy(ventas), [ventas])
   const mesTotal = useMemo(() => gananciaDelMes(ventas), [ventas])
 
+  // Tendencia de los últimos 14 días para las tarjetas de resumen
+  const tendencia = useMemo(
+    () =>
+      serieContinuaPorDia(ventas, 14).map((d) => ({ ...d, totalCobrado: d.costo + d.ganancia })),
+    [ventas]
+  )
+
   const datosPeriodo = vistaPeriodo === 'dia' ? gananciasPorDia : gananciasPorMes
-  const datosGrafico = datosPeriodo.slice(vistaPeriodo === 'dia' ? -14 : -12)
+  const datosGrafico = useMemo(
+    () =>
+      vistaPeriodo === 'dia' ? serieContinuaPorDia(ventas, 14) : serieContinuaPorMes(ventas, 12),
+    [ventas, vistaPeriodo]
+  )
   const datosTabla = [...datosPeriodo].reverse()
 
-  const datosTorta = [
-    { name: 'Costos (Insumos, Luz, Flete)', value: costoTotal },
-    { name: 'Ganancia Limpia', value: gananciaNeta }
-  ]
-  const coloresTorta = [CHART_COLORS.danger, CHART_COLORS.accent]
-
-  const ultimasVentas = ventas.slice(-5).map((v) => ({
-    nombre: v.titulo.substring(0, 10) + (v.titulo.length > 10 ? '...' : ''),
-    ganancia: v.ganancia,
-    costo: v.costo
+  const ultimasVentas = ventas
+    .slice(-5)
+    .reverse()
+    .map((v) => ({ nombre: v.titulo || 'Sin título', ganancia: v.ganancia, costo: v.costo }))
+  const datosPorTipo = gananciasPorTipo.map((t) => ({
+    nombre: t.tipo,
+    ganancia: t.ganancia,
+    costo: t.costo
   }))
 
   const handleReset = async () => {
@@ -179,141 +188,99 @@ export default function Dashboard() {
       </div>
 
       <div className="resumen-tarjetas">
-        <div className="glass-panel tarjeta-stat">
-          <div className="tarjeta-stat-icon tarjeta-stat-icon-info">
-            <Wallet size={20} />
-          </div>
-          <h4 className="tarjeta-stat-label">Facturación Bruta</h4>
-          <p className="tarjeta-stat-valor" style={{ color: 'var(--color-info)' }}>
-            {formatearPesos(totalCobrado)}
-          </p>
-        </div>
-        <div className="glass-panel tarjeta-stat">
-          <div className="tarjeta-stat-icon tarjeta-stat-icon-danger">
-            <TrendingDown size={20} />
-          </div>
-          <h4 className="tarjeta-stat-label">Costos Operativos</h4>
-          <p className="tarjeta-stat-valor" style={{ color: 'var(--color-danger)' }}>
-            {formatearPesos(costoTotal)}
-          </p>
-        </div>
-        <div className="glass-panel tarjeta-stat tarjeta-stat-destacada">
-          <div className="tarjeta-stat-icon tarjeta-stat-icon-accent">
-            <TrendingUp size={20} />
-          </div>
-          <h4 className="tarjeta-stat-label">Ganancia Neta</h4>
-          <p
-            className="tarjeta-stat-valor tarjeta-stat-valor-glow"
-            style={{ color: 'var(--color-accent)' }}
+        {[
+          {
+            clave: 'totalCobrado',
+            titulo: 'Facturación bruta',
+            valor: totalCobrado,
+            icono: Wallet,
+            color: colores.facturacion,
+            variante: 'facturacion'
+          },
+          {
+            clave: 'costo',
+            titulo: 'Costos operativos',
+            valor: costoTotal,
+            icono: TrendingDown,
+            color: colores.costo,
+            variante: 'costo'
+          },
+          {
+            clave: 'ganancia',
+            titulo: 'Ganancia neta',
+            valor: gananciaNeta,
+            icono: TrendingUp,
+            color: colores.ganancia,
+            variante: 'ganancia'
+          }
+        ].map(({ clave, titulo, valor, icono: Icono, color, variante }) => (
+          <div
+            key={clave}
+            className={`glass-panel tarjeta-stat tarjeta-stat-${variante}${
+              variante === 'ganancia' ? ' tarjeta-stat-destacada' : ''
+            }`}
           >
-            {formatearPesos(gananciaNeta)}
-          </p>
-        </div>
+            <div className="tarjeta-stat-cabecera">
+              <div className="tarjeta-stat-icon">
+                <Icono size={18} />
+              </div>
+              <h4 className="tarjeta-stat-label">{titulo}</h4>
+            </div>
+            <MontoAnimado valor={valor} className="tarjeta-stat-valor" />
+            <Sparkline
+              datos={tendencia}
+              clave={clave}
+              color={color}
+              superficie={colores.superficie}
+            />
+            <span className="tarjeta-stat-pie">Últimos 14 días</span>
+          </div>
+        ))}
       </div>
 
       <div className="graficos-container">
         <div className="glass-panel grafico-caja">
-          <h4 className="grafico-titulo">
-            <PieChartIcon size={18} /> Distribución del Dinero
-          </h4>
+          <div className="grafico-encabezado">
+            <h4 className="grafico-titulo">
+              <PieChartIcon size={18} /> Distribución del dinero
+            </h4>
+            <span className="grafico-subtitulo">A dónde va cada peso cobrado</span>
+          </div>
           {ventas.length === 0 ? (
-            <p className="text-center mt-5" style={{ color: 'var(--color-text-muted)' }}>
-              Guarda un trabajo para ver los gráficos.
-            </p>
+            <p className="grafico-vacio">Guardá un trabajo para ver los gráficos.</p>
           ) : (
-            <div style={{ width: '100%', height: 300 }}>
-              <ResponsiveContainer>
-                <PieChart>
-                  <Pie
-                    data={datosTorta}
-                    dataKey="value"
-                    nameKey="name"
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={100}
-                    label
-                  >
-                    {datosTorta.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={coloresTorta[index % coloresTorta.length]}
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip contentStyle={CHART_TOOLTIP_STYLE} />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
+            <GraficoDistribucion costo={costoTotal} ganancia={gananciaNeta} colores={colores} />
           )}
         </div>
 
         <div className="glass-panel grafico-caja">
-          <h4 className="grafico-titulo">
-            <TrendingUp size={18} /> Últimos 5 Trabajos
-          </h4>
+          <div className="grafico-encabezado">
+            <h4 className="grafico-titulo">
+              <TrendingUp size={18} /> Últimos 5 trabajos
+            </h4>
+            <span className="grafico-subtitulo">
+              Costo y ganancia de cada uno, el más reciente arriba
+            </span>
+          </div>
           {ventas.length === 0 ? (
-            <p className="text-center mt-5" style={{ color: 'var(--color-text-muted)' }}>
-              Esperando datos...
-            </p>
+            <p className="grafico-vacio">Esperando datos…</p>
           ) : (
-            <div style={{ width: '100%', height: 300 }}>
-              <ResponsiveContainer>
-                <BarChart data={ultimasVentas}>
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    stroke={CHART_COLORS.border}
-                    vertical={false}
-                  />
-                  <XAxis dataKey="nombre" stroke={CHART_COLORS.textMuted} />
-                  <YAxis stroke={CHART_COLORS.textMuted} />
-                  <Tooltip contentStyle={CHART_TOOLTIP_STYLE} />
-                  <Bar
-                    dataKey="ganancia"
-                    name="Ganancia Neta"
-                    fill={CHART_COLORS.accent}
-                    stackId="a"
-                  />
-                  <Bar dataKey="costo" name="Costos" fill={CHART_COLORS.danger} stackId="a" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
+            <GraficoBarrasApiladas datos={ultimasVentas} colores={colores} />
           )}
         </div>
       </div>
 
       <div className="glass-panel grafico-caja">
-        <h4 className="grafico-titulo">
-          <Layers size={18} /> Ganancia por Tipo de Trabajo
-        </h4>
+        <div className="grafico-encabezado">
+          <h4 className="grafico-titulo">
+            <Layers size={18} /> Ganancia por tipo de trabajo
+          </h4>
+          <span className="grafico-subtitulo">Ordenado de mayor a menor ganancia</span>
+        </div>
         {ventas.length === 0 ? (
-          <p className="text-center mt-5" style={{ color: 'var(--color-text-muted)' }}>
-            Guarda un trabajo para ver este gráfico.
-          </p>
+          <p className="grafico-vacio">Guardá un trabajo para ver este gráfico.</p>
         ) : (
-          <div style={{ width: '100%', height: 280 }}>
-            <ResponsiveContainer>
-              <BarChart data={gananciasPorTipo}>
-                <CartesianGrid
-                  strokeDasharray="3 3"
-                  stroke={CHART_COLORS.border}
-                  vertical={false}
-                />
-                <XAxis dataKey="tipo" stroke={CHART_COLORS.textMuted} tick={{ fontSize: 11 }} />
-                <YAxis stroke={CHART_COLORS.textMuted} />
-                <Tooltip
-                  contentStyle={CHART_TOOLTIP_STYLE}
-                  formatter={(value) => formatearPesos(value)}
-                />
-                <Bar
-                  dataKey="ganancia"
-                  name="Ganancia Neta"
-                  fill={CHART_COLORS.accent}
-                  stackId="a"
-                />
-                <Bar dataKey="costo" name="Costos" fill={CHART_COLORS.danger} stackId="a" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+          <GraficoBarrasApiladas datos={datosPorTipo} colores={colores} />
         )}
       </div>
 
@@ -350,17 +317,13 @@ export default function Dashboard() {
             <h5 className="mini-tarjeta-periodo-label">
               Ganancia de Hoy <span>({etiquetaHoy()})</span>
             </h5>
-            <p className="mini-tarjeta-periodo-valor" style={{ color: 'var(--color-accent)' }}>
-              {formatearPesos(hoyTotal)}
-            </p>
+            <MontoAnimado valor={hoyTotal} className="mini-tarjeta-periodo-valor" />
           </div>
           <div className="mini-tarjeta-periodo">
             <h5 className="mini-tarjeta-periodo-label">
               Ganancia de Este Mes <span>({etiquetaMesActual()})</span>
             </h5>
-            <p className="mini-tarjeta-periodo-valor" style={{ color: 'var(--color-accent)' }}>
-              {formatearPesos(mesTotal)}
-            </p>
+            <MontoAnimado valor={mesTotal} className="mini-tarjeta-periodo-valor" />
           </div>
         </div>
 
@@ -370,28 +333,11 @@ export default function Dashboard() {
           </p>
         ) : (
           <div className="periodo-contenido">
-            <div style={{ width: '100%', height: 280 }}>
-              <ResponsiveContainer>
-                <BarChart data={datosGrafico}>
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    stroke={CHART_COLORS.border}
-                    vertical={false}
-                  />
-                  <XAxis dataKey="label" stroke={CHART_COLORS.textMuted} tick={{ fontSize: 11 }} />
-                  <YAxis stroke={CHART_COLORS.textMuted} />
-                  <Tooltip
-                    contentStyle={CHART_TOOLTIP_STYLE}
-                    formatter={(value) => formatearPesos(value)}
-                  />
-                  <Bar
-                    dataKey="ganancia"
-                    name="Ganancia"
-                    fill={CHART_COLORS.accent}
-                    radius={[4, 4, 0, 0]}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
+            <div className="periodo-grafico">
+              <span className="grafico-subtitulo">
+                {vistaPeriodo === 'dia' ? 'Últimos 14 días' : 'Últimos 12 meses'}
+              </span>
+              <GraficoPeriodo key={vistaPeriodo} datos={datosGrafico} colores={colores} />
             </div>
 
             <div className="tabla-ganancias-wrapper">

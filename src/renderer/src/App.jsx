@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import { Zap, LayoutDashboard, Calculator, Package, Users, Sun, Moon, Search } from 'lucide-react'
+import { LayoutDashboard, Calculator, Package, Users, Sun, Moon, Search } from 'lucide-react'
 import './styles/TemaGlobal.css'
+import logo from './assets/logo-ln.png'
 import { useStore } from './store/useStore'
 import Calculadora from './components/Calculadora'
 import Dashboard from './components/Dashboard'
@@ -39,8 +40,9 @@ function App() {
     <div className="app-layout">
       <nav className="sidebar">
         <div className="sidebar-logo">
-          <Zap size={22} />
-          <span>Lo Nuestro</span>
+          <img className="sidebar-logo-img" src={logo} alt="" />
+          <span className="sidebar-logo-nombre">Lo Nuestro</span>
+          <span className="divisor-estrella" aria-hidden="true" />
         </div>
         {NAV_ITEMS.map(({ id, label, icon: Icon }) => (
           <button
@@ -52,14 +54,17 @@ function App() {
             <span className="label">{label}</span>
           </button>
         ))}
-        <button className="nav-boton" onClick={() => setBuscadorAbierto(true)}>
-          <Search size={20} />
-          <span className="label">Buscar (Ctrl+K)</span>
-        </button>
-        <button className="nav-boton" onClick={toggleTema}>
-          {tema === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-          <span className="label">{tema === 'dark' ? 'Modo claro' : 'Modo oscuro'}</span>
-        </button>
+        <div className="sidebar-footer">
+          <button className="nav-boton" onClick={() => setBuscadorAbierto(true)}>
+            <Search size={20} />
+            <span className="label">Buscar</span>
+            <kbd className="nav-atajo">Ctrl K</kbd>
+          </button>
+          <button className="nav-boton" onClick={toggleTema}>
+            {tema === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+            <span className="label">{tema === 'dark' ? 'Modo claro' : 'Modo oscuro'}</span>
+          </button>
+        </div>
       </nav>
 
       <main className="main-content">

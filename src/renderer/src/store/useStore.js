@@ -44,7 +44,7 @@ export const useStore = create(
         'Otros'
       ],
       movimientosStock: [],
-      tema: 'dark',
+      tema: 'light',
 
       // Tema claro/oscuro
       toggleTema: () => set((state) => ({ tema: state.tema === 'dark' ? 'light' : 'dark' })),
@@ -186,7 +186,13 @@ export const useStore = create(
         }))
     }),
     {
-      name: 'lo-nuestro-db'
+      name: 'lo-nuestro-db',
+      version: 1,
+      // v1: estrena el tema claro "kraft" como predeterminado (una sola vez)
+      migrate: (persistido, version) => {
+        if (version < 1) return { ...persistido, tema: 'light' }
+        return persistido
+      }
     }
   )
 )

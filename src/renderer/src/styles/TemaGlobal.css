@@ -1,12 +1,42 @@
 /* src/renderer/src/styles/TemaGlobal.css */
 @import './tokens.css';
+@import './bootstrap-tema.css';
 
 body {
   background-color: var(--color-bg);
+  background-image: var(--texture-paper);
   color: var(--color-text);
   font-family: var(--font-body);
   overflow: hidden;
   margin: 0;
+  transition: background-color var(--transition-base), color var(--transition-base);
+}
+
+::selection {
+  background: var(--color-info-soft);
+  color: var(--color-text);
+}
+
+/* Scrollbars finos y cálidos */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--color-text-muted) 35%, transparent);
+  border: 3px solid transparent;
+  border-radius: var(--radius-full);
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--color-text-muted) 60%, transparent);
+  background-clip: padding-box;
 }
 
 .app-layout {
@@ -15,50 +45,84 @@ body {
   width: 100vw;
 }
 
-/* Sidebar (Menú lateral) */
+/* Sidebar: placa de madera grabada */
 .sidebar {
   width: 250px;
   flex-shrink: 0;
   background-color: var(--color-sidebar);
-  border-right: 1px solid var(--color-border);
+  background-image: var(--texture-wood), var(--sidebar-bg);
+  /* La veta se estira a toda la altura: sin costuras al repetirse */
+  background-size: 100% 100%, auto;
+  background-repeat: no-repeat;
+  border-right: 1px solid var(--sidebar-border);
+  box-shadow:
+    inset -5px 0 0 -4px var(--sidebar-border),
+    4px 0 18px -6px rgba(52, 34, 14, 0.35);
   display: flex;
   flex-direction: column;
-  padding: var(--space-4) 0;
-  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.3);
+  gap: 2px;
+  padding: var(--space-6) var(--space-3) var(--space-4);
   z-index: 10;
   transition: width var(--transition-base);
 }
 
 .sidebar-logo {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: var(--space-2);
-  font-family: var(--font-heading);
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: var(--color-info);
+  margin-bottom: var(--space-5);
+  color: var(--sidebar-text);
   text-align: center;
-  padding-bottom: var(--space-5);
-  border-bottom: 1px solid var(--color-border);
-  margin-bottom: var(--space-4);
 }
 
-.sidebar-logo svg {
-  filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.5));
+.sidebar-logo-img {
+  width: 64px;
+  height: 64px;
+  border-radius: 15px;
+  box-shadow: var(--sidebar-logo-shadow);
+}
+
+.sidebar-logo-nombre {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.1;
+  margin-top: var(--space-1);
+  text-shadow: var(--shadow-engrave);
+}
+
+.sidebar-logo .divisor-estrella {
+  width: 140px;
+  color: var(--sidebar-text-muted);
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--sidebar-border);
 }
 
 .nav-boton {
   background: transparent;
   border: none;
-  border-right: 4px solid transparent;
-  color: var(--color-text-muted);
-  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-md);
+  color: var(--sidebar-text-muted);
+  padding: var(--space-3) var(--space-4);
   text-align: left;
   font-family: var(--font-body);
-  font-size: 1rem;
+  font-size: 0.95rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: background var(--transition-base), color var(--transition-base), padding var(--transition-base);
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast),
+    box-shadow var(--transition-fast);
   width: 100%;
   display: flex;
   align-items: center;
@@ -67,24 +131,64 @@ body {
 
 .nav-boton svg {
   flex-shrink: 0;
+  transition: transform var(--transition-fast);
 }
 
 .nav-boton:hover {
-  background-color: var(--color-surface-muted);
-  color: var(--color-text);
-  padding-left: var(--space-6);
+  background-color: var(--sidebar-hover);
+  color: var(--sidebar-text);
+}
+
+.nav-boton:hover svg {
+  transform: translateX(2px);
 }
 
 .nav-boton:focus-visible {
   outline: 2px solid var(--color-ring);
-  outline-offset: -2px;
+  outline-offset: 1px;
 }
 
+/* Activo: "grabado" sobre la madera */
 .nav-boton.activo {
-  background-color: var(--color-info-soft);
-  color: var(--color-info);
+  background-color: var(--sidebar-active-bg);
+  color: var(--sidebar-active-text);
   font-weight: 600;
-  border-right-color: var(--color-info);
+  box-shadow:
+    inset 0 1px 3px rgba(0, 0, 0, 0.25),
+    0 1px 0 rgba(255, 250, 240, 0.35);
+}
+
+.nav-boton.activo:hover svg {
+  transform: none;
+}
+
+.nav-atajo {
+  margin-left: auto;
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--sidebar-border);
+  background: transparent;
+  color: var(--sidebar-text-muted);
+}
+
+/* Divisor con la estrella de 4 puntas del logo: ──── ✦ ──── */
+.divisor-estrella {
+  display: block;
+  height: 12px;
+  color: var(--color-info);
+  background-color: currentColor;
+  -webkit-mask:
+    linear-gradient(#000 0 0) left center / calc(50% - 13px) 1px no-repeat,
+    linear-gradient(#000 0 0) right center / calc(50% - 13px) 1px no-repeat,
+    var(--icono-estrella) center / 12px 12px no-repeat;
+  mask:
+    linear-gradient(#000 0 0) left center / calc(50% - 13px) 1px no-repeat,
+    linear-gradient(#000 0 0) right center / calc(50% - 13px) 1px no-repeat,
+    var(--icono-estrella) center / 12px 12px no-repeat;
 }
 
 .buscador-box {
@@ -93,14 +197,17 @@ body {
   gap: var(--space-2);
   background-color: var(--color-input-bg);
   border: 1px solid var(--color-input-border);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   padding: var(--space-3);
   color: var(--color-text-muted);
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
 .buscador-box:focus-within {
-  border-color: var(--color-info);
-  box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+  border-color: var(--color-ring);
+  box-shadow: 0 0 0 3px var(--color-ring-soft);
 }
 
 .buscador-box input {
@@ -111,6 +218,10 @@ body {
   font-size: 0.95rem;
 }
 
+.buscador-box input::placeholder {
+  color: var(--color-text-subtle);
+}
+
 .buscador-box input:focus {
   outline: none;
 }
@@ -118,25 +229,36 @@ body {
 /* Contenido Principal */
 .main-content {
   flex: 1;
-  padding: var(--space-8);
+  padding: var(--space-8) var(--space-10);
   overflow-y: auto;
-  background-color: var(--color-bg);
+  background: transparent;
   position: relative;
   z-index: 1;
   min-width: 0;
 }
 
+/* Especificidad cero: las clases de cada componente pueden pisarlo */
+:where(.main-content) :where(h1, h2, h3, h4, h5) {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
 .main-content h1,
 .main-content h2,
 .main-content h3 {
-  font-family: var(--font-heading);
   color: var(--color-text) !important;
-  font-weight: 600;
   margin-bottom: var(--space-4);
 }
 
-.main-content p {
-  color: var(--color-text-muted) !important;
+.main-content h2 {
+  font-size: 1.9rem;
+}
+
+/* Sin !important y con especificidad mínima: los valores de tarjetas y los
+   colores inline (ingresos, costos, ganancia) deben poder pisarlo */
+:where(.main-content) p {
+  color: var(--color-text-muted);
   font-size: 1.05rem;
 }
 
@@ -144,17 +266,26 @@ body {
   color: var(--color-text-muted) !important;
 }
 
-/* Paneles de Cristal (Glassmorphism) */
+/* Paneles: tarjeta de papel */
 .glass-panel {
   background: var(--color-glass-bg);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--color-border-soft);
   border-radius: var(--radius-lg);
   padding: var(--space-8);
   box-shadow: var(--shadow-md);
   position: relative;
   z-index: 5;
+}
+
+/* Doble marco grabado, como el borde del ícono */
+.tarjeta-stat::before,
+.ticket-resumen::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border: 1px solid var(--color-border-soft);
+  border-radius: calc(var(--radius-lg) - 5px);
+  pointer-events: none;
 }
 
 input, select, button, textarea {
@@ -168,28 +299,34 @@ input, select, button, textarea {
 }
 
 @keyframes aparecer {
-  0% { opacity: 0; transform: translateY(15px); }
+  0% { opacity: 0; transform: translateY(12px); }
   100% { opacity: 1; transform: translateY(0); }
 }
 
 /* Responsive: ventana angosta colapsa la sidebar a solo íconos */
 @media (max-width: 900px) {
   .sidebar {
-    width: 72px;
+    width: 76px;
+    padding-left: var(--space-2);
+    padding-right: var(--space-2);
   }
 
-  .sidebar-logo span,
-  .nav-boton .label {
+  .sidebar-logo-img {
+    width: 44px;
+    height: 44px;
+    border-radius: 11px;
+  }
+
+  .sidebar-logo-nombre,
+  .sidebar-logo .divisor-estrella,
+  .nav-boton .label,
+  .nav-atajo {
     display: none;
   }
 
   .nav-boton {
     justify-content: center;
-    padding: var(--space-4);
-  }
-
-  .nav-boton:hover {
-    padding-left: var(--space-4);
+    padding: var(--space-3);
   }
 
   .main-content {

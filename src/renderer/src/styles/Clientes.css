@@ -47,8 +47,10 @@ body.modo-impresion-clientes .main-content {
   background: var(--color-glass-bg-soft);
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border-soft);
+  box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 .kanban-header {
   display: flex;
@@ -56,9 +58,12 @@ body.modo-impresion-clientes .main-content {
   justify-content: center;
   gap: var(--space-2);
   padding: var(--space-4);
-  font-weight: bold;
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 600;
   text-align: center;
   border-bottom: 1px solid var(--color-border-soft);
+  box-shadow: inset 0 3px 0 currentColor;
 }
 .kanban-header-warning {
   color: var(--color-warning);
@@ -86,11 +91,19 @@ body.modo-impresion-clientes .main-content {
     var(--color-card-gradient-start),
     var(--color-card-gradient-end)
   );
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   padding: var(--space-4);
+  border: 1px solid var(--color-border-soft);
   border-left: 4px solid;
   position: relative;
   box-shadow: var(--shadow-sm);
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+.ficha-trabajo:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 .ficha-a-hacer {
   border-left-color: var(--color-warning);
@@ -112,6 +125,7 @@ body.modo-impresion-clientes .main-content {
 .ficha-precio {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
+  font-weight: 600;
   color: var(--color-accent);
 }
 
@@ -175,6 +189,7 @@ body.modo-impresion-clientes .main-content {
   flex-direction: column;
   gap: var(--space-1);
   background: var(--color-surface-muted);
+  border: 1px solid var(--color-border-soft);
   border-radius: var(--radius-md);
   padding: var(--space-3);
 }
@@ -270,23 +285,33 @@ body.modo-impresion-clientes .main-content {
   border-radius: var(--radius-lg);
   padding: var(--space-6);
   position: relative;
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform var(--transition-base),
+    box-shadow var(--transition-base);
 }
+.cliente-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+/* Pastilla sobre el nombre (antes iba en la esquina y tapaba los nombres largos) */
 .cliente-tipo {
-  position: absolute;
-  top: var(--space-4);
-  right: var(--space-4);
-  font-size: 0.8rem;
+  display: inline-block;
+  margin-bottom: var(--space-2);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   padding: 0.2rem 0.6rem;
-  border-radius: var(--radius-sm);
-  font-weight: bold;
+  border-radius: var(--radius-full);
+  font-weight: 600;
 }
 .tipo-empresa {
   background-color: var(--color-info-soft);
-  color: #7dd3fc;
-  border: 1px solid var(--color-info);
+  color: var(--color-info);
+  border: 1px solid color-mix(in srgb, var(--color-info) 45%, transparent);
 }
 .tipo-consumidor {
   background-color: var(--color-accent-soft);
-  color: #6ee7b7;
-  border: 1px solid var(--color-accent);
+  color: var(--color-accent);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 45%, transparent);
 }

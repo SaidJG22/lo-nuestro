@@ -1,0 +1,145 @@
+/* src/renderer/src/styles/bootstrap-tema.css */
+/* Puente entre los tokens de la marca y las variables de Bootstrap.
+   Bootstrap necesita los colores en tripletes RGB, por eso se repiten aquí por tema. */
+
+:root {
+  --bs-primary-rgb: 138, 75, 31;
+  --bs-info-rgb: 138, 75, 31;
+  --bs-success-rgb: 78, 117, 54;
+  --bs-warning-rgb: 148, 96, 14;
+  --bs-danger-rgb: 163, 56, 42;
+  --bs-secondary-rgb: 107, 83, 61;
+  --bs-emphasis-color-rgb: 52, 34, 14;
+  --bs-link-color-rgb: 138, 75, 31;
+  --bs-link-hover-color-rgb: 111, 58, 22;
+  --bs-box-shadow-sm: 0 1px 2px rgba(52, 34, 14, 0.08);
+  --bs-box-shadow: 0 8px 24px -10px rgba(52, 34, 14, 0.25);
+}
+
+:root[data-theme='dark'] {
+  --bs-primary-rgb: 221, 161, 103;
+  --bs-info-rgb: 221, 161, 103;
+  --bs-success-rgb: 164, 194, 127;
+  --bs-warning-rgb: 229, 179, 92;
+  --bs-danger-rgb: 229, 127, 104;
+  --bs-secondary-rgb: 197, 175, 149;
+  --bs-emphasis-color-rgb: 243, 233, 218;
+  --bs-link-color-rgb: 221, 161, 103;
+  --bs-link-hover-color-rgb: 235, 185, 132;
+  --bs-box-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --bs-box-shadow: 0 8px 24px -10px rgba(0, 0, 0, 0.6);
+}
+
+:root,
+:root[data-theme='dark'] {
+  --bs-body-bg: var(--color-bg);
+  --bs-body-color: var(--color-text);
+  --bs-body-font-family: var(--font-body);
+  --bs-emphasis-color: var(--color-text);
+  --bs-secondary-color: var(--color-text-muted);
+  --bs-tertiary-color: var(--color-text-subtle);
+  --bs-border-color: var(--color-border);
+  --bs-heading-color: inherit;
+  --bs-box-shadow-lg: var(--shadow-lg);
+  --bs-focus-ring-color: var(--color-ring-soft);
+}
+
+/* Botones */
+.btn {
+  --bs-btn-font-weight: 600;
+  --bs-btn-border-radius: var(--radius-md);
+  --bs-btn-focus-box-shadow: 0 0 0 3px var(--color-ring-soft);
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.btn:not(:disabled):hover {
+  transform: translateY(-1px);
+}
+
+.btn-primary {
+  --bs-btn-color: var(--color-on-brand);
+  --bs-btn-bg: var(--color-info);
+  --bs-btn-border-color: var(--color-info);
+  --bs-btn-hover-color: var(--color-on-brand);
+  --bs-btn-hover-bg: var(--color-brand-hover);
+  --bs-btn-hover-border-color: var(--color-brand-hover);
+  --bs-btn-active-color: var(--color-on-brand);
+  --bs-btn-active-bg: var(--color-brand-hover);
+  --bs-btn-active-border-color: var(--color-brand-hover);
+  --bs-btn-disabled-color: var(--color-on-brand);
+  --bs-btn-disabled-bg: var(--color-info);
+  --bs-btn-disabled-border-color: var(--color-info);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-success {
+  --bs-btn-color: var(--color-on-brand);
+  --bs-btn-bg: var(--color-accent);
+  --bs-btn-border-color: var(--color-accent);
+  --bs-btn-hover-color: var(--color-on-brand);
+  --bs-btn-hover-bg: color-mix(in srgb, var(--color-accent) 85%, var(--color-text));
+  --bs-btn-hover-border-color: color-mix(in srgb, var(--color-accent) 85%, var(--color-text));
+  --bs-btn-active-color: var(--color-on-brand);
+  --bs-btn-active-bg: color-mix(in srgb, var(--color-accent) 80%, var(--color-text));
+  --bs-btn-active-border-color: color-mix(in srgb, var(--color-accent) 80%, var(--color-text));
+  --bs-btn-disabled-color: var(--color-on-brand);
+  --bs-btn-disabled-bg: var(--color-accent);
+  --bs-btn-disabled-border-color: var(--color-accent);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-outline-info {
+  --bs-btn-color: var(--color-info);
+  --bs-btn-border-color: color-mix(in srgb, var(--color-info) 55%, transparent);
+  --bs-btn-hover-color: var(--color-info);
+  --bs-btn-hover-bg: var(--color-info-soft);
+  --bs-btn-hover-border-color: var(--color-info);
+  --bs-btn-active-color: var(--color-on-brand);
+  --bs-btn-active-bg: var(--color-info);
+  --bs-btn-active-border-color: var(--color-info);
+  --bs-btn-disabled-color: var(--color-info);
+  --bs-btn-disabled-border-color: var(--color-info);
+}
+
+.btn-outline-danger {
+  --bs-btn-color: var(--color-danger);
+  --bs-btn-border-color: color-mix(in srgb, var(--color-danger) 55%, transparent);
+  --bs-btn-hover-color: var(--color-danger);
+  --bs-btn-hover-bg: var(--color-danger-soft);
+  --bs-btn-hover-border-color: var(--color-danger);
+  --bs-btn-active-color: var(--color-on-danger);
+  --bs-btn-active-bg: var(--color-danger);
+  --bs-btn-active-border-color: var(--color-danger);
+  --bs-btn-disabled-color: var(--color-danger);
+  --bs-btn-disabled-border-color: var(--color-danger);
+}
+
+/* Formularios */
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--color-ring);
+  box-shadow: 0 0 0 3px var(--color-ring-soft);
+}
+
+.form-select {
+  --bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%236b533d' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+}
+
+:root[data-theme='dark'] .form-select {
+  --bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23c5af95' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+}
+
+.form-select option {
+  background-color: var(--color-bg-elevated);
+  color: var(--color-text);
+}
+
+hr {
+  color: var(--color-border);
+  opacity: 1;
+}

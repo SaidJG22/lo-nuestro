@@ -100,3 +100,46 @@ export function etiquetaHoy() {
 export function etiquetaMesActual() {
   return capitalizar(new Date().toLocaleDateString('es-AR', { month: 'long', year: 'numeric' }))
 }
+
+// Series continuas para gráficos de tiempo: los días/meses sin ventas cuentan
+// como 0, así la línea no "saltea" fechas. Terminan en el período actual.
+function sumarPorClave(ventas, obtenerClave) {
+  const totales = new Map()
+  for (const venta of ventas) {
+    const clave = obtenerClave(venta.fecha)
+    const t = totales.get(clave) ?? { ganancia: 0, costo: 0, cantidad: 0 }
+    t.ganancia += venta.ganancia
+    t.costo += venta.costo
+    t.cantidad += 1
+    totales.set(clave, t)
+  }
+  return totales
+}
+
+export function serieContinuaPorDia(ventas, dias = 14) {
+  const totales = sumarPorClave(ventas, claveDia)
+  const hoy = new Date()
+  return Array.from({ length: dias }, (_, i) => {
+    const fecha = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate() - (dias - 1 - i))
+    const clave = claveDia(fecha.toISOString())
+    return {
+      clave,
+      label: fecha.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit' }),
+      ...(totales.get(clave) ?? { ganancia: 0, costo: 0, cantidad: 0 })
+    }
+  })
+}
+
+export function serieContinuaPorMes(ventas, meses = 12) {
+  const totales = sumarPorClave(ventas, claveMes)
+  const hoy = new Date()
+  return Array.from({ length: meses }, (_, i) => {
+    const fecha = new Date(hoy.getFullYear(), hoy.getMonth() - (meses - 1 - i), 1)
+    const clave = claveMes(fecha.toISOString())
+    return {
+      clave,
+      label: fecha.toLocaleDateString('es-AR', { month: 'short', year: '2-digit' }),
+      ...(totales.get(clave) ?? { ganancia: 0, costo: 0, cantidad: 0 })
+    }
+  })
+}

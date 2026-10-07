@@ -5,7 +5,9 @@ import { electronAPI } from '@electron-toolkit/preload'
 const api = {
   exportarBackup: (jsonString) => ipcRenderer.invoke('backup:export', jsonString),
   importarBackup: () => ipcRenderer.invoke('backup:import'),
-  exportarPDF: (defaultFileName) => ipcRenderer.invoke('reporte:exportar-pdf', defaultFileName)
+  exportarPDF: (defaultFileName) => ipcRenderer.invoke('reporte:exportar-pdf', defaultFileName),
+  // true cuando la app se abrió con `npm run demo` (perfil con datos ficticios)
+  esDemo: process.argv.includes('--lo-nuestro-demo')
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

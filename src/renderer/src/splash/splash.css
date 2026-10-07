@@ -1,0 +1,154 @@
+/* src/renderer/src/splash/splash.css */
+/* Pantalla de carga: el emblema sobre papel kraft y un "láser" que recorre la barra. */
+@import '@fontsource/cinzel/latin-600.css';
+
+:root {
+  --kraft-claro: #e8dbc7;
+  --kraft: #dfcfb6;
+  --tinta: #34220e;
+  --grabado: #5e3211;
+  --brasa: #e8853a;
+  --brasa-nucleo: #ffd09a;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+html,
+body {
+  height: 100%;
+  background: transparent;
+  overflow: hidden;
+  user-select: none;
+  -webkit-app-region: drag;
+}
+
+body {
+  display: grid;
+  place-items: center;
+  padding: 14px;
+}
+
+.splash {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  border-radius: 24px;
+  background-color: var(--kraft);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.37 0 0 0 0 0.2 0 0 0 0 0.07 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse at 50% 42%, var(--kraft-claro) 0%, var(--kraft) 70%, #d6c4a8 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(94, 50, 17, 0.25),
+    inset 0 0 0 7px var(--kraft),
+    inset 0 0 0 8px rgba(94, 50, 17, 0.18),
+    0 10px 28px -8px rgba(52, 34, 14, 0.55);
+  animation: aparecer 500ms ease-out both;
+  transition:
+    opacity 350ms ease,
+    transform 350ms ease;
+}
+
+.splash-emblema {
+  width: 344px;
+  height: 344px;
+  /* Funde los bordes cuadrados de la imagen con el papel: solo queda el círculo del emblema */
+  -webkit-mask-image: radial-gradient(circle closest-side, #000 93%, transparent 100%);
+  mask-image: radial-gradient(circle closest-side, #000 93%, transparent 100%);
+  animation: emblema 900ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  -webkit-user-drag: none;
+}
+
+/* Barra indeterminada: pista grabada + punto de láser al rojo */
+.splash-barra {
+  position: relative;
+  width: 200px;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(94, 50, 17, 0.16);
+  overflow: hidden;
+  animation: aparecer 500ms 250ms ease-out both;
+}
+
+.splash-barra span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 34%;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--grabado) 35%,
+    var(--brasa) 80%,
+    var(--brasa-nucleo) 96%,
+    transparent
+  );
+  box-shadow: 0 0 8px rgba(232, 133, 58, 0.7);
+  animation: laser 1.5s cubic-bezier(0.6, 0, 0.4, 1) infinite;
+}
+
+.splash-texto {
+  font-family: 'Cinzel', 'Times New Roman', serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--grabado);
+  opacity: 0.85;
+  animation: aparecer 500ms 400ms ease-out both;
+}
+
+body.saliendo .splash {
+  opacity: 0;
+  transform: scale(0.98);
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes emblema {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes laser {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(300%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash,
+  .splash-emblema,
+  .splash-barra,
+  .splash-texto {
+    animation: none;
+  }
+
+  .splash-barra span {
+    animation-duration: 3s;
+  }
+}

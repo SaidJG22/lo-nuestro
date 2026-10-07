@@ -1,54 +1,89 @@
 /* src/renderer/src/styles/tokens.css */
-@import '@fontsource/lexend/latin-400.css';
-@import '@fontsource/lexend/latin-600.css';
-@import '@fontsource/lexend/latin-700.css';
+/* Identidad "Lo Nuestro": madera de arce grabada a láser + papel kraft + marrón quemado. */
+@import '@fontsource/cinzel/latin-600.css';
+@import '@fontsource/cinzel/latin-700.css';
+@import '@fontsource/fraunces/latin-500.css';
+@import '@fontsource/fraunces/latin-600.css';
+@import '@fontsource/fraunces/latin-700.css';
 @import '@fontsource/inter/latin-400.css';
 @import '@fontsource/inter/latin-500.css';
 @import '@fontsource/inter/latin-600.css';
-@import '@fontsource/jetbrains-mono/latin-400.css';
-@import '@fontsource/jetbrains-mono/latin-600.css';
 
+/* Tema claro "Kraft" (por defecto) */
 :root {
   /* Color - base */
-  --color-bg: #020617;
-  --color-bg-elevated: #0e1223;
-  --color-sidebar: #0f172a;
-  --color-surface-muted: #1a1e2f;
-  --color-border: #334155;
-  --color-border-soft: rgba(255, 255, 255, 0.1);
+  --color-bg: #eee4d3;
+  --color-bg-elevated: #fbf7f0;
+  --color-sidebar: #e6c7a0;
+  --color-surface-muted: #e7dbc7;
+  --color-border: #d2c0a2;
+  --color-border-soft: rgba(94, 50, 17, 0.14);
 
-  /* Color - texto */
-  --color-text: #f8fafc;
-  --color-text-muted: #94a3b8;
-  --color-text-subtle: #64748b;
+  /* Color - texto (tinta del emblema) */
+  --color-text: #34220e;
+  --color-text-muted: #6b533d;
+  --color-text-subtle: #927a62;
 
-  /* Color - acento / semántico */
-  --color-accent: #22c55e;
-  --color-accent-soft: rgba(34, 197, 94, 0.12);
-  --color-info: #38bdf8;
-  --color-info-soft: rgba(56, 189, 248, 0.12);
-  --color-warning: #f59e0b;
-  --color-warning-soft: rgba(245, 158, 11, 0.12);
-  --color-danger: #ef4444;
-  --color-danger-soft: rgba(239, 68, 68, 0.12);
+  /* Color - marca / semántico */
+  --color-info: #8a4b1f; /* coñac: marca y acciones */
+  --color-info-soft: rgba(138, 75, 31, 0.12);
+  --color-brand-hover: #6f3a16;
+  --color-on-brand: #fbf7f0;
+  --color-accent: #4e7536; /* oliva: ganancias */
+  --color-accent-soft: rgba(78, 117, 54, 0.13);
+  --color-warning: #94600e; /* ocre */
+  --color-warning-soft: rgba(148, 96, 14, 0.13);
+  --color-danger: #a3382a; /* ladrillo */
+  --color-danger-soft: rgba(163, 56, 42, 0.12);
+  --color-on-danger: #fff8f0;
 
-  --color-ring: #38bdf8;
+  --color-ring: #8a4b1f;
+  --color-ring-soft: rgba(138, 75, 31, 0.22);
 
-  /* Color - superficies auxiliares (glass panels, overlays, inputs) */
-  --color-overlay: rgba(2, 6, 23, 0.65);
-  --color-input-bg: rgba(2, 6, 23, 0.8);
-  --color-input-border: rgba(56, 189, 248, 0.3);
-  --color-glass-bg: rgba(14, 18, 35, 0.7);
-  --color-glass-bg-soft: rgba(14, 18, 35, 0.6);
-  --color-card-gradient-start: rgba(26, 30, 47, 0.9);
-  --color-card-gradient-end: rgba(2, 6, 23, 0.9);
-  --color-card-gradient-start-soft: rgba(26, 30, 47, 0.8);
-  --color-card-gradient-end-soft: rgba(2, 6, 23, 0.8);
+  /* Series de gráficos (par validado para daltonismo; espejo en utils/chartTheme.js) */
+  --chart-ganancia: #3d6626;
+  --chart-costo: #c27c4a;
+  --chart-facturacion: #8a4b1f;
+
+  /* Color - superficies auxiliares (paneles, overlays, inputs) */
+  --color-overlay: rgba(52, 34, 14, 0.42);
+  --color-input-bg: #fffdf9;
+  --color-input-border: #d2c0a2;
+  --color-glass-bg: #fbf7f0;
+  --color-glass-bg-soft: rgba(251, 247, 240, 0.72);
+  --color-card-gradient-start: #fffcf7;
+  --color-card-gradient-end: #f5ede0;
+  --color-card-gradient-start-soft: #fffcf7;
+  --color-card-gradient-end-soft: #f7f0e5;
+
+  /* Sidebar: placa de arce */
+  --sidebar-bg: linear-gradient(180deg, #ebcfab 0%, #e3c29b 55%, #dcb88f 100%);
+  --sidebar-text: #4a2810;
+  --sidebar-text-muted: #603e20;
+  --sidebar-hover: rgba(94, 50, 17, 0.09);
+  --sidebar-active-bg: #5e3211;
+  --sidebar-active-text: #fbefdd;
+  --sidebar-border: rgba(94, 50, 17, 0.38);
+  --sidebar-logo-shadow: 0 2px 6px rgba(74, 40, 16, 0.35);
+
+  /* Sombras cálidas */
+  --shadow-sm: 0 1px 2px rgba(52, 34, 14, 0.06), 0 1px 3px rgba(52, 34, 14, 0.08);
+  --shadow-md: 0 1px 2px rgba(52, 34, 14, 0.05), 0 12px 32px -14px rgba(52, 34, 14, 0.3);
+  --shadow-lg: 0 2px 6px rgba(52, 34, 14, 0.08), 0 28px 60px -22px rgba(52, 34, 14, 0.45);
+  --shadow-engrave: 0 1px 0 rgba(255, 250, 240, 0.65);
+
+  /* Texturas (ruido SVG): grano de papel y veta de madera */
+  --texture-paper: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.37 0 0 0 0 0.2 0 0 0 0 0.07 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
+  --texture-wood: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='600'%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.16 0.004' numOctaves='3' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.24 0 0 0 0 0.08 0 0 0 1.6 -0.55'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23w)' opacity='0.35'/%3E%3C/svg%3E");
+
+  /* Estrella de 4 puntas del logo (se usa como máscara, toma currentColor) */
+  --icono-estrella: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 0C12.9 7.6 16.4 11.1 24 12 16.4 12.9 12.9 16.4 12 24 11.1 16.4 7.6 12.9 0 12 7.6 11.1 11.1 7.6 12 0Z'/%3E%3C/svg%3E");
 
   /* Tipografía */
-  --font-heading: 'Lexend', system-ui, sans-serif;
+  --font-display: 'Cinzel', 'Times New Roman', serif;
+  --font-heading: 'Fraunces', Georgia, serif;
   --font-body: 'Inter', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --font-mono: 'Inter', system-ui, sans-serif; /* números: las clases usan tabular-nums */
 
   /* Espaciado (escala 4px) */
   --space-1: 4px;
@@ -64,54 +99,83 @@
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 16px;
+  --radius-xl: 22px;
   --radius-full: 999px;
-
-  /* Sombras */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.25);
-  --shadow-glow-accent: 0 0 15px rgba(34, 197, 94, 0.35);
 
   /* Transiciones */
   --transition-fast: 150ms ease;
   --transition-base: 250ms ease;
+
+  color-scheme: light;
 }
 
-:root[data-theme='light'] {
+/* Tema oscuro "Nogal" */
+:root[data-theme='dark'] {
   /* Color - base */
-  --color-bg: #f1f5f9;
-  --color-bg-elevated: #ffffff;
-  --color-sidebar: #ffffff;
-  --color-surface-muted: #e2e8f0;
-  --color-border: #cbd5e1;
-  --color-border-soft: rgba(15, 23, 42, 0.1);
+  --color-bg: #1a120c;
+  --color-bg-elevated: #241911;
+  --color-sidebar: #140d08;
+  --color-surface-muted: #30231a;
+  --color-border: #4a3727;
+  --color-border-soft: rgba(243, 233, 218, 0.09);
 
   /* Color - texto */
-  --color-text: #0f172a;
-  --color-text-muted: #475569;
-  --color-text-subtle: #64748b;
+  --color-text: #f3e9da;
+  --color-text-muted: #c5af95;
+  --color-text-subtle: #8f7962;
 
-  /* Color - acento / semántico (mismos tonos, funcionan bien sobre claro) */
-  --color-accent: #16a34a;
-  --color-accent-soft: rgba(22, 163, 74, 0.12);
-  --color-info: #0284c7;
-  --color-info-soft: rgba(2, 132, 199, 0.12);
-  --color-warning: #d97706;
-  --color-warning-soft: rgba(217, 119, 6, 0.12);
-  --color-danger: #dc2626;
-  --color-danger-soft: rgba(220, 38, 38, 0.12);
+  /* Color - marca / semántico */
+  --color-info: #dda167; /* caramelo */
+  --color-info-soft: rgba(221, 161, 103, 0.14);
+  --color-brand-hover: #ebb984;
+  --color-on-brand: #1e140c;
+  --color-accent: #a4c27f; /* salvia */
+  --color-accent-soft: rgba(164, 194, 127, 0.13);
+  --color-warning: #e5b35c;
+  --color-warning-soft: rgba(229, 179, 92, 0.13);
+  --color-danger: #e57f68;
+  --color-danger-soft: rgba(229, 127, 104, 0.13);
+  --color-on-danger: #1e140c;
 
-  --color-ring: #0284c7;
+  --color-ring: #dda167;
+  --color-ring-soft: rgba(221, 161, 103, 0.28);
+
+  --chart-ganancia: #77a05e;
+  --chart-costo: #9b5824;
+  --chart-facturacion: #dda167;
 
   /* Color - superficies auxiliares */
-  --color-overlay: rgba(15, 23, 42, 0.45);
-  --color-input-bg: #ffffff;
-  --color-input-border: rgba(2, 132, 199, 0.35);
-  --color-glass-bg: rgba(255, 255, 255, 0.75);
-  --color-glass-bg-soft: rgba(255, 255, 255, 0.65);
-  --color-card-gradient-start: #ffffff;
-  --color-card-gradient-end: #eef2f7;
-  --color-card-gradient-start-soft: #ffffff;
-  --color-card-gradient-end-soft: #f1f5f9;
+  --color-overlay: rgba(8, 5, 3, 0.7);
+  --color-input-bg: #1c140d;
+  --color-input-border: #4a3727;
+  --color-glass-bg: #231810;
+  --color-glass-bg-soft: rgba(36, 25, 17, 0.75);
+  --color-card-gradient-start: #2a1e15;
+  --color-card-gradient-end: #211710;
+  --color-card-gradient-start-soft: #2a1e15;
+  --color-card-gradient-end-soft: #221811;
+
+  /* Sidebar: placa de nogal */
+  --sidebar-bg: linear-gradient(180deg, #1e140d 0%, #170f0a 60%, #120c07 100%);
+  --sidebar-text: #e9d8bf;
+  --sidebar-text-muted: #b49a7d;
+  --sidebar-hover: rgba(233, 216, 191, 0.06);
+  --sidebar-active-bg: rgba(221, 161, 103, 0.16);
+  --sidebar-active-text: #edb57c;
+  --sidebar-border: rgba(221, 161, 103, 0.2);
+  --sidebar-logo-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+
+  /* Sombras */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 1px 2px rgba(0, 0, 0, 0.25), 0 14px 34px -14px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 2px 6px rgba(0, 0, 0, 0.3), 0 30px 64px -20px rgba(0, 0, 0, 0.75);
+  --shadow-engrave: 0 1px 0 rgba(0, 0, 0, 0.45);
+
+  /* Texturas */
+  --texture-paper: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.95 0 0 0 0 0.85 0 0 0 0 0.7 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  --texture-wood: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='600'%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.16 0.004' numOctaves='3' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.55 0 0 0 0 0.36 0 0 0 0 0.2 0 0 0 1.6 -0.55'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23w)' opacity='0.14'/%3E%3C/svg%3E");
+
+  color-scheme: dark;
 }
 
 *,

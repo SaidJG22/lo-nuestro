@@ -94,7 +94,8 @@ body.modo-impresion-stock .main-content {
   gap: var(--space-2);
   color: var(--color-text);
   font-family: var(--font-heading);
-  font-size: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
 }
 
 .categoria-inventario-meta {
@@ -105,28 +106,33 @@ body.modo-impresion-stock .main-content {
 }
 
 .tabla-glass {
-  background: var(--color-glass-bg-soft);
+  background: var(--color-glass-bg);
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border-soft);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
 }
 .tabla-glass table { color: var(--color-text); margin-bottom: 0; width: 100%; }
 .tabla-glass thead th {
-  background-color: var(--color-sidebar);
-  border-bottom: 2px solid var(--color-info-soft);
+  background-color: var(--color-surface-muted);
+  border-bottom: 1px solid var(--color-border);
   color: var(--color-text-muted);
   font-family: var(--font-body);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  padding: var(--space-4);
+  letter-spacing: 0.05em;
+  padding: var(--space-3) var(--space-4);
 }
 .tabla-glass td { padding: var(--space-4); border-bottom: 1px solid var(--color-border-soft); vertical-align: middle; }
 .tabla-glass tbody tr {
   transition: background var(--transition-fast);
 }
+.tabla-glass tbody tr:last-child td {
+  border-bottom: none;
+}
 .tabla-glass tbody tr:hover {
-  background: var(--color-surface-muted);
+  background: var(--color-info-soft);
 }
 .celda-numero {
   font-family: var(--font-mono);
@@ -137,12 +143,12 @@ body.modo-impresion-stock .main-content {
   align-items: center;
   gap: var(--space-1);
   background-color: var(--color-danger-soft);
-  color: #fda4af;
-  border: 1px solid var(--color-danger);
-  padding: 0.3rem 0.6rem;
-  border-radius: var(--radius-sm);
-  font-size: 0.85rem;
-  font-weight: bold;
+  color: var(--color-danger);
+  border: 1px solid color-mix(in srgb, var(--color-danger) 45%, transparent);
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 600;
 }
 
 .btn-icono {
@@ -151,9 +157,9 @@ body.modo-impresion-stock .main-content {
   justify-content: center;
   width: 32px;
   height: 32px;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   border: 1px solid var(--color-border);
-  background: transparent;
+  background: var(--color-input-bg);
   color: var(--color-text-muted);
   cursor: pointer;
   transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
@@ -183,5 +189,5 @@ body.modo-impresion-stock .main-content {
 
 .btn-icono-danger-solido:hover {
   background: var(--color-danger);
-  color: #fff;
+  color: var(--color-on-danger);
 }

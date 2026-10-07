@@ -1,7 +1,7 @@
 export default function SelectorEstadoTrabajo({ value, onChange }) {
   return (
     <select
-      className="form-select w-auto bg-dark text-white border-warning"
+      className="form-select w-auto input-dark border-warning"
       value={value}
       onChange={(e) => onChange(e.target.value)}
     >
